@@ -5,7 +5,6 @@ from dbtc import dbtCloudClient
 # first party
 from utils.helpers import list_to_dict
 
-@st.experimental_singleton
 def get_client(service_token):
     client = dbtCloudClient(service_token=service_token)
     return client
