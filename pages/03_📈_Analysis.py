@@ -14,7 +14,7 @@ st.set_page_config(
     page_title='dbtc Explorer - Metadata API', page_icon='📈', layout='wide'
 )
 
-if 'dbtc_client' not in st.session_state:
+if 'account_id' not in st.session_state:
     st.warning('Go to home page and enter your service token')
     st.stop()
 
@@ -98,13 +98,15 @@ def build_last_n_runs_chart(runs_df: pd.DataFrame):
         runs_df,
         x='started_at',
         y='run_duration_m',
-        hover_data=['id', 'status_humanized'],
+        hover_data={'id': False, 'status_humanized': True},
+        hover_name='id',
         markers=True,
-        title=f'Last {st.session_state.n_runs} Runs - <a href="{job_url}">{job}</a>'
+        title=f'Last {st.session_state.n_runs} Runs - <a href="{job_url}">{job}</a>',
     ).update_layout(
         title_x=0.5,
         xaxis_title='Date',
-        yaxis_title='Time (minutes)'
+        yaxis_title='Time (minutes)',
+        hovermode='closest',
     )
     avg = px.line(
         runs_df,
@@ -159,9 +161,16 @@ def build_gantt_chart(runs_df: pd.DataFrame, selected_run: List[Dict]):
         y='threadId',
         color='executionTime',
         color_continuous_scale='blues',
-        hover_data=['name', 'executionTime', 'status'],
+        hover_data={
+            'executeStartedAt': False,
+            'executeCompletedAt': False,
+            'threadId': False,
+            'name': False,
+            'status': True,
+        },
         title=f'Model Timing - <a href="{url}">{run_id}</a>',
-    ).update_layout({'title_x': 0.5})
+        hover_name='name',
+    ).update_layout(title_x=0.5, hovermode='closest')
     return fig, df
 
 

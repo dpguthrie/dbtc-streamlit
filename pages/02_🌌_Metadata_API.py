@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 
-if 'dbtc_client' not in st.session_state:
+if 'account_id' not in st.session_state:
     st.warning('Go to home page and enter your service token')
     st.stop()
 
