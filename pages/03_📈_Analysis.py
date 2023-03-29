@@ -39,6 +39,17 @@ ABOVE_BELOW_RUNS = 3
 OVERRIDE_HEIGHT = 600
 
 
+def _set_color(x):
+    color: str = 'blue'
+    if x == 'Success':
+        color = '#00CC96'
+    elif x == 'Error':
+        color = '#EF553B'
+    elif x == 'Cancelled':
+        color = '#FECB52'
+    return color
+
+
 def _enhance_df(df: pd.DataFrame):
     
     # Convert to minutes
@@ -107,6 +118,17 @@ def build_last_n_runs_chart(runs_df: pd.DataFrame):
         xaxis_title='Date',
         yaxis_title='Time (minutes)',
         hovermode='closest',
+        
+    ).update_traces(
+        marker=dict(
+            color='white',
+            line=dict(
+                color=list(map(_set_color, runs_df['status_humanized'])),
+                width=3,
+            ),
+            size=10,
+            
+        ),       
     )
     avg = px.line(
         runs_df,
@@ -134,6 +156,11 @@ def build_gantt_chart(runs_df: pd.DataFrame, selected_run: List[Dict]):
         run_id = runs_df.loc[idx]['id']
     else:
         run_id = runs_df.loc[0]['id']
+    url = URLS['run'].format(**{
+        'account_id': st.session_state.account_id,
+        'project_id': st.session_state.project_id,
+        'run_id': run_id,
+    })
     kwargs['run_id'] = int(run_id)
     models = client.dynamic_request(
         st.session_state.dbtc_client.metadata,
@@ -143,17 +170,12 @@ def build_gantt_chart(runs_df: pd.DataFrame, selected_run: List[Dict]):
     ).get('data', {}).get('models', [])
     models = [m for m in models if m['threadId'] is not None]
     if len(models) == 0:
-        st.info(f'No model timing info for run {run_id}')
+        st.info(f'No model timing info for run [{run_id}]({url})')
         return None, pd.DataFrame([])
     
     df = pd.DataFrame(models)
     GANTT_DATETIME_COLS = ['executeStartedAt', 'executeCompletedAt']
     df[GANTT_DATETIME_COLS] = df[GANTT_DATETIME_COLS].apply(pd.to_datetime)
-    url = URLS['run'].format(**{
-        'account_id': st.session_state.account_id,
-        'project_id': st.session_state.project_id,
-        'run_id': run_id,
-    })
     fig = px.timeline(
         df,
         x_start='executeStartedAt',
@@ -289,7 +311,7 @@ runs = st.number_input(
     max_value=10000,
     step=100,
     key='n_runs'
-)       
+)
 
 if len(st.session_state.jobs.keys()) > 0:
     
