@@ -79,12 +79,13 @@ def get_credential_widget(is_required: bool = True):
     
     
     
-def get_environment_widget(is_required: bool = True):
+def get_environment_widget(is_required: bool = True, **kwargs):
     environments = client.dynamic_request(
         st.session_state.dbtc_client.cloud,
         'list_environments',
         st.session_state.account_id,
         project_id=st.session_state.get('project_id', []),
+        **kwargs
     ).get('data', [])
     environments = list_to_dict(environments)
     options = list(environments.keys())
@@ -119,12 +120,13 @@ def get_group_widget(is_required: bool = True):
     )
 
     
-def get_job_widget(is_required: bool = True):
+def get_job_widget(is_required: bool = True, **kwargs):
     jobs = client.dynamic_request(
         st.session_state.dbtc_client.cloud,
         'list_jobs',
         st.session_state.account_id,
         project_id=st.session_state.get('project_id', None),
+        **kwargs,
     ).get('data', [])
     jobs = list_to_dict(jobs)
     options = list(jobs.keys())
