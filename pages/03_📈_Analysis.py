@@ -377,8 +377,8 @@ def get_sql(model_df: pd.DataFrame, run_id: int):
 st.write('# Analyze Historical Performance')
 
 st.markdown('''
-1. Select a job to analyze
-2. Click on the elements in the chart to drilldown
+1. Make selections in the dropdowns below
+2. Click on the elements in the charts to drilldown further
 ''')
 
 # Add styling for metrics
