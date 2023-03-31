@@ -1,7 +1,8 @@
 [data-testid="metric-container"] {
-    text-align: center
+    text-align: center;
+    background-color: #eee;
 } 
 
 [data-testid="stMetricLabel"] {
-    display: flex
+    display: flex;
 }
