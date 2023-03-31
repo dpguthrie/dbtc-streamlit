@@ -31,7 +31,6 @@ from utils import inputs
 from utils.helpers import URLS
 
 
-
 DATETIME_COLUMNS = [
     'created_at',
     'updated_at',
@@ -381,6 +380,20 @@ st.markdown('''
 2. Click on the elements in the chart to drilldown
 ''')
 
+# Add styling for metrics
+css = '''
+[data-testid="metric-container"] {
+    text-align: center;
+    background-color: #f1f2f6;
+} 
+
+[data-testid="stMetricLabel"] {
+    display: flex;
+}
+'''
+st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
+
+
 # Create widgets
 inputs.get_account_widget()
 inputs.get_project_widget()
@@ -488,16 +501,3 @@ if len(st.session_state.environments.keys()) > 0:
                 get_sql(model_df, model_df.loc[model_run_index]['runId'])
             else:
                 get_sql(model_df, runs_df.loc[run_index]['id'])
-
-
-css = '''
-[data-testid="metric-container"] {
-    text-align: center;
-    background-color: #f1f2f6;
-} 
-
-[data-testid="stMetricLabel"] {
-    display: flex;
-}
-'''
-st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
