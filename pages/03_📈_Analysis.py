@@ -490,4 +490,14 @@ if len(st.session_state.environments.keys()) > 0:
                 get_sql(model_df, runs_df.loc[run_index]['id'])
 
 
-local_css('style.css')
+css = '''
+[data-testid="metric-container"] {
+    text-align: center;
+    background-color: #f1f2f6;
+} 
+
+[data-testid="stMetricLabel"] {
+    display: flex;
+}
+'''
+st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
