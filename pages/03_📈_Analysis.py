@@ -119,6 +119,7 @@ def get_env_runs_stats(df: pd.DataFrame):
     )
     df['success_rate'] = round(df['total_success'] / df['total_runs'] * 100, 2)
     df['url'] = df.apply(lambda x: f'https://cloud.getdbt.com/deploy/{int(x.account_id)}/projects/{int(x.project_id)}/jobs/{int(x.job_id)}', axis=1)
+    df['last_run'] = df['last_run'].dt.strftime('%Y-%m-%d %H:%M:%S')
     cols = ['avg_runtime', 'last_runtime', 'std_runtime', 'max_runtime']
     df[cols] = df[cols].round(1)
     return df[[
