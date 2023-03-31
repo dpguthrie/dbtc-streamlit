@@ -75,6 +75,12 @@ def apply_datetime_to_columns(df: pd.DataFrame, columns: List[str]):
     df[columns] = df[columns].apply(pd.to_datetime)
     return df
 
+
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+
 if __name__ == '__main__':
     pass
 
