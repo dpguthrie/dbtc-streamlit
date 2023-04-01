@@ -385,7 +385,6 @@ st.markdown('''
 css = '''
 [data-testid="metric-container"] {
     text-align: center;
-    background-color: #f1f2f6;
 } 
 
 [data-testid="stMetricLabel"] {
