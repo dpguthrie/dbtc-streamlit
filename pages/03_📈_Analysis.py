@@ -18,7 +18,7 @@ from utils.helpers import local_css
 
 
 st.set_page_config(
-    page_title='dbtc Explorer - Metadata API', page_icon='📈', layout='wide'
+    page_title='dbtc Explorer - Analysis', page_icon='📈', layout='wide'
 )
 
 if 'account_id' not in st.session_state:
@@ -421,11 +421,13 @@ if len(st.session_state.environments.keys()) > 0:
     # Aggregating stats from xf df
     agg_stats = get_aggregate_stats(env_runs_df_xf)
     
+    # Create metrics
     col1, col2, col3 = st.columns(3)
-    col1.metric('Success Rate', f'{agg_stats["success_rate"] * 100}%')
+    col1.metric('Success Rate', f'{round(agg_stats["success_rate"] * 100, 2)}%')
     col2.metric('Completed Runs', agg_stats['completed_runs'])
-    col3.metric('Longest Runtime', agg_stats['max_runtime'])
+    col3.metric('Longest Runtime (mins)', agg_stats['max_runtime'])
     
+    # Create table for aggregate stats
     xf_formatter = {
         'job_name': ('Job', {**agstyler.PINLEFT, 'width': 250, 'cellRenderer': JsCode('''
                 function(params) {console.log(params.data.url); return '<a href="' + params.data.url + '" target="_blank">' + params.value + '</a>'}
