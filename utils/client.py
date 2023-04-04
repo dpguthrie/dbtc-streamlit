@@ -1,13 +1,15 @@
 # third party
 import streamlit as st
-
-# first party
-from utils.helpers import list_to_dict
+from requests.exceptions import ConnectionError
 
 
 @st.cache_data(show_spinner=False)
 def dynamic_request(_prop, method, *args, **kwargs):
-    return getattr(_prop, method)(*args, **kwargs)
+    try:
+        return getattr(_prop, method)(*args, **kwargs)
+    except ConnectionError as e:
+        st.error(e)
+        st.stop()
 
 
 if __name__ == '__main__':

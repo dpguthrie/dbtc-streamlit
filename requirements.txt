@@ -1,4 +1,4 @@
-dbtc==0.4.0
+dbtc==0.4.2
 streamlit<1.21.0
 streamlit-plotly-events==0.0.6
 streamlit-aggrid==0.3.3

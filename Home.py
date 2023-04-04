@@ -7,6 +7,9 @@ from utils.client import dynamic_request
 from utils.helpers import list_to_dict
 
 
+DEFAULT_HOST = 'cloud.getdbt.com'
+
+
 st.set_page_config(
     page_title="dbtc",
     page_icon="👋",
@@ -20,9 +23,18 @@ st.markdown(
     **dbtc** is an open-source python library that provides a simple interface
     to both the admin and metadata APIs for dbt Cloud.
     \n
-    To get started, input your service
-    token below.
+    To get started, input your service token below.
+    \n
+    **And if you're on a single tenant instance or in a non-US multi-tenant region, update the domain as well (e.g. emea.dbt.com).
+    Otherwise, it should remain as `cloud.getdbt.com`.**
     """
+)
+
+host = st.text_input(
+    label='Input Domain',
+    value=DEFAULT_HOST,
+    key='dbt_cloud_host',
+    help='Only change if you\'re on a single tenant instance or in a non-US multi-tenant region.'
 )
 
 service_token = st.text_input(
@@ -44,7 +56,8 @@ st.markdown(
 if st.session_state.service_token != '':
     st.cache_data.clear()
     st.session_state.dbtc_client = dbtCloudClient(
-        service_token=st.session_state.service_token
+        service_token=st.session_state.service_token,
+        host=st.session_state.dbt_cloud_host,
     )
     accounts = dynamic_request(
         st.session_state.dbtc_client.cloud,
